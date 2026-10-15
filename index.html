@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yuk, Bernegosiasi! — MPI Bahasa Indonesia Kelas X</title>
+<style>
+:root{
+  --navy:#17324f;--blue:#2b6291;--sky:#eaf3fa;--paper:#f7fafc;
+  --green:#21845a;--green2:#dff4e9;--orange:#e88a2b;--red:#b43c3c;
+  --ink:#263646;--muted:#617487;--line:#d9e3ec;--white:#fff;
+  --shadow:0 12px 32px rgba(23,50,79,.10);--radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(135deg,#eef5fa,#f9fbfd 55%,#eaf5f2);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid #f4b942;outline-offset:3px}
+.app{max-width:1160px;margin:auto;padding:18px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 6px 18px}
+.brand{display:flex;gap:12px;align-items:center;font-weight:800;color:var(--navy)}
+.logo{width:44px;height:44px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:22px;box-shadow:var(--shadow)}
+.small{font-size:.88rem;color:var(--muted);font-weight:500}
+.score-pill{background:#fff;border:1px solid var(--line);border-radius:99px;padding:9px 14px;font-size:.9rem;font-weight:750;color:var(--navy);white-space:nowrap}
+.screen{display:none;animation:fade .25s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero{background:var(--navy);color:#fff;border-radius:28px;padding:clamp(28px,6vw,64px);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.hero:after{content:"🤝";position:absolute;right:7%;bottom:-25px;font-size:clamp(90px,17vw,190px);opacity:.13;transform:rotate(-12deg)}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-weight:800;font-size:.78rem;color:#b9d9f5}
+.hero h1{font-size:clamp(2.3rem,6vw,4.5rem);line-height:1.02;margin:.45em 0 .3em;max-width:760px}
+.hero p{font-size:clamp(1rem,2vw,1.25rem);line-height:1.6;color:#e4edf5;max-width:690px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.btn{border:0;border-radius:13px;padding:13px 19px;font-weight:800;transition:transform .15s,filter .15s;box-shadow:0 3px 0 rgba(0,0,0,.07)}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+.primary{background:var(--green);color:#fff}
+.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.blue{background:var(--blue);color:#fff}
+.orange{background:var(--orange);color:#fff}
+.danger{background:var(--red);color:#fff}
+.ghost{background:transparent;border:1px solid #b8cad9;color:var(--navy);box-shadow:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:clamp(18px,3vw,30px);box-shadow:var(--shadow);margin:18px 0}
+h2{font-size:clamp(1.7rem,3.5vw,2.4rem);color:var(--navy);margin:.1em 0 .3em}
+h3{color:var(--navy);margin:.25em 0 .45em}
+p{line-height:1.65}
+.lead{font-size:1.08rem;color:#4b5f71;max-width:850px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.menu-card{border:1px solid var(--line);background:#fff;border-radius:18px;padding:22px;text-align:left;min-height:150px;box-shadow:0 5px 18px rgba(23,50,79,.05);color:var(--ink);width:100%}
+.menu-card:hover{border-color:#8fb6d5;transform:translateY(-2px)}
+.menu-card .emoji{font-size:2rem;display:block;margin-bottom:10px}
+.menu-card strong{font-size:1.18rem;display:block;color:var(--navy);margin-bottom:4px}
+.menu-card span:last-child{color:var(--muted);font-size:.95rem}
+.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.tag{display:inline-flex;align-items:center;border-radius:99px;background:var(--sky);color:var(--blue);font-size:.8rem;font-weight:800;padding:6px 10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.dialog{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start;padding:15px 0;border-bottom:1px solid var(--line)}
+.dialog:last-child{border-bottom:0}
+.speaker{font-weight:800;color:var(--blue)}
+.bubble{background:var(--paper);border:1px solid var(--line);padding:13px 16px;border-radius:4px 16px 16px 16px;line-height:1.55}
+.structure{font-size:.78rem;font-weight:850;color:var(--green);margin-top:8px;display:block;text-transform:uppercase;letter-spacing:.04em}
+.info-card{background:var(--paper);border:1px solid var(--line);padding:17px;border-radius:16px}
+.info-card .num{font-size:1.4rem;font-weight:900;color:var(--blue)}
+.callout{border-left:5px solid var(--orange);padding:14px 17px;background:#fff7e9;border-radius:0 12px 12px 0;margin:18px 0}
+.success{background:var(--green2);border:1px solid #b5e3cb;color:#185e40;padding:15px;border-radius:14px}
+.feedback{margin-top:14px;padding:13px 15px;border-radius:12px;font-weight:650;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--green2);color:#155d3c}
+.feedback.try{background:#fff3db;color:#805115}
+.choice-list{display:grid;gap:10px;margin-top:16px}
+.choice{display:flex;text-align:left;align-items:flex-start;gap:11px;padding:14px 15px;background:#fff;border:2px solid var(--line);border-radius:13px;color:var(--ink);line-height:1.45}
+.choice:hover{border-color:#8fb6d5}
+.choice.selected{border-color:var(--blue);background:var(--sky)}
+.choice.correct{border-color:var(--green);background:var(--green2)}
+.choice.wrong{border-color:var(--red);background:#fff0f0}
+.letter{width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#eaf0f6;display:grid;place-items:center;font-weight:900;color:var(--navy)}
+.progress{height:9px;border-radius:99px;background:#e5edf3;overflow:hidden;margin:14px 0}
+.progress>span{display:block;height:100%;background:var(--green);width:0;transition:width .25s}
+.drag-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.draggable{padding:12px;border:1px dashed #91a9bc;border-radius:12px;background:#fff;margin:8px 0;cursor:grab;touch-action:manipulation}
+.dropzone{min-height:55px;padding:11px;border:2px dashed #b5c5d2;border-radius:12px;background:#f8fbfd;margin:7px 0}
+.dropzone.over{border-color:var(--blue);background:var(--sky)}
+.dropzone.correct-drop{border-color:var(--green);background:var(--green2)}
+.dropzone strong{display:block;color:var(--navy);font-size:.9rem}
+.dropzone .placeholder{font-size:.85rem;color:var(--muted)}
+.dropzone button{margin-top:7px}
+.result-number{font-size:clamp(3rem,9vw,5.5rem);font-weight:900;color:var(--navy);line-height:1.1;text-align:center}
+.result-label{text-align:center;color:var(--muted);font-weight:750}
+.footer{color:#718294;font-size:.8rem;text-align:center;padding:24px 8px 10px}
+hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+label{font-weight:750;color:var(--navy);display:block;margin:14px 0 7px}
+textarea,input{width:100%;border:1px solid #bdcbd7;border-radius:12px;padding:12px 14px;font:inherit;background:white;color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+kbd{background:#eaf0f6;padding:2px 6px;border-radius:5px}
+@media(max-width:760px){.app{padding:10px}.topbar{align-items:flex-start}.grid,.grid.three,.drag-layout{grid-template-columns:1fr}.dialog{grid-template-columns:86px 1fr}.panel{padding:17px}.score-pill{font-size:.8rem;padding:8px}.hero{border-radius:20px}}
+@media print{body{background:white}.topbar,.footer,.actions,.btn{display:none!important}.screen{display:none!important}.screen.active{display:block!important}.panel{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">🤝</div><div>MPI Bahasa Indonesia<div class="small">SMK Negeri 5 Kolaka Utara • Kelas X / Fase E</div></div></div>
+    <div class="score-pill">⭐ Skor sesi: <span id="scoreDisplay">0</span></div>
+  </header>
+
+  <main>
+    <section id="home" class="screen active">
+      <div class="hero">
+        <div class="eyebrow">Media Pembelajaran Interaktif</div>
+        <h1>Yuk, Bernegosiasi!</h1>
+        <p>Belajar teks negosiasi melalui dialog, simulasi tawar-menawar, dan tantangan menemukan kesepakatan yang dapat diterima kedua belah pihak.</p>
+        <div class="actions"><button class="btn primary" onclick="go('menu')">▶ Mulai Belajar</button><button class="btn secondary" onclick="go('profile')">Tentang MPI</button></div>
+      </div>
+      <div class="grid three" style="margin-top:18px">
+        <div class="info-card"><div class="num">01</div><strong>Pahami</strong><p>Kenali tujuan, struktur, dan bahasa negosiasi.</p></div>
+        <div class="info-card"><div class="num">02</div><strong>Praktikkan</strong><p>Pilih dialog yang santun untuk mencapai titik temu.</p></div>
+        <div class="info-card"><div class="num">03</div><strong>Refleksikan</strong><p>Nilai alasan dan kesepakatan kedua pihak.</p></div>
+      </div>
+    </section>
+
+    <section id="menu" class="screen">
+      <div class="section-head"><div><span class="tag">MENU UTAMA</span><h2>Pilih aktivitasmu</h2><p class="lead">Mulai dari materi, lalu coba simulasi dan uji pemahamanmu. Kamu juga boleh menjelajah menu sesuai kebutuhan.</p></div><button class="btn ghost" onclick="go('home')">← Beranda</button></div>
+      <div class="grid">
+        <button class="menu-card" onclick="go('materi')"><span class="emoji">📚</span><strong>Materi Dialog</strong><span>Pengertian, struktur, ciri, dan contoh dialog.</span></button>
+        <button class="menu-card" onclick="startSimulation()"><span class="emoji">🎯</span><strong>Simulasi Negosiasi</strong><span>Berlatih memilih respons dalam tawar-menawar.</span></button>
+        <button class="menu-card" onclick="startQuiz()"><span class="emoji">📝</span><strong>Kuis Interaktif</strong><span>3 soal, umpan balik, dan skor otomatis.</span></button>
+        <button class="menu-card" onclick="go('profile')"><span class="emoji">👤</span><strong>Profil & Petunjuk</strong><span>Cara menggunakan MPI dan informasi media.</span></button>
+      </div>
+      <div class="callout"><strong>Target belajar:</strong> mampu memahami dialog negosiasi, mengenali pengajuan dan penawaran, serta menyusun kesepakatan dengan bahasa yang santun.</div>
+    </section>
+
+    <section id="materi" class="screen">
+      <div class="section-head"><div><span class="tag">01 • PELAJARI</span><h2>Teks Negosiasi dalam Dialog</h2><p class="lead">Bacalah dialog, lalu klik tombol struktur untuk melihat fungsi setiap bagian.</p></div><button class="btn ghost" onclick="go('menu')">← Menu Utama</button></div>
+      <div class="panel">
+        <h3>Apa itu teks negosiasi?</h3>
+        <p>Teks negosiasi adalah teks yang menggambarkan komunikasi antara dua pihak atau lebih yang memiliki kepentingan berbeda dan berusaha mencapai kesepakatan yang dapat diterima bersama.</p>
+        <div class="grid three">
+          <div class="info-card"><strong>👥 Para pihak</strong><p>Melibatkan dua pihak atau lebih.</p></div>
+          <div class="info-card"><strong>⚖️ Kepentingan</strong><p>Ada kebutuhan atau keinginan yang perlu dipertemukan.</p></div>
+          <div class="info-card"><strong>🤝 Kesepakatan</strong><p>Berakhir pada persetujuan atau solusi yang disepakati.</p></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="section-head"><div><h3>Bedah Dialog: Membeli Tas Sekolah</h3><p class="small">Pilih “Apa fungsi bagian ini?” pada tiap dialog.</p></div><span class="tag">CONTOH</span></div>
+        <div class="dialog"><div class="speaker">Penjual</div><div><div class="bubble">“Selamat siang. Ada yang bisa saya bantu?”</div><button class="btn ghost" onclick="showStruct('s1')">Apa fungsi bagian ini?</button><div class="feedback" id="s1">Orientasi: membuka percakapan dan membangun komunikasi.</div></div></div>
+        <div class="dialog"><div class="speaker">Pembeli</div><div><div class="bubble">“Saya ingin membeli tas ini. Berapa harganya?”</div><button class="btn ghost" onclick="showStruct('s2')">Apa fungsi bagian ini?</button><div class="feedback" id="s2">Pengajuan: menyampaikan keinginan atau kebutuhan awal.</div></div></div>
+        <div class="dialog"><div class="speaker">Pembeli</div><div><div class="bubble">“Apakah bisa Rp120.000?”</div><button class="btn ghost" onclick="showStruct('s3')">Apa fungsi bagian ini?</button><div class="feedback" id="s3">Penawaran: mengusulkan harga atau alternatif untuk dipertimbangkan.</div></div></div>
+        <div class="dialog"><div class="speaker">Penjual</div><div><div class="bubble">“Bagaimana jika Rp130.000?”</div><button class="btn ghost" onclick="showStruct('s4')">Apa fungsi bagian ini?</button><div class="feedback" id="s4">Penawaran balasan: mengajukan alternatif sebagai titik temu.</div></div></div>
+        <div class="dialog"><div class="speaker">Pembeli</div><div><div class="bubble">“Baik, saya setuju Rp130.000.”</div><button class="btn ghost" onclick="showStruct('s5')">Apa fungsi bagian ini?</button><div class="feedback" id="s5">Persetujuan: menyatakan bahwa tawaran diterima.</div></div></div>
+        <div class="dialog"><div class="speaker">Penjual</div><div><div class="bubble">“Terima kasih. Semoga tas ini bermanfaat.”</div><button class="btn ghost" onclick="showStruct('s6')">Apa fungsi bagian ini?</button><div class="feedback" id="s6">Penutup: mengakhiri interaksi dengan sopan.</div></div></div>
+      </div>
+      <div class="panel">
+        <h3>Ungkapan yang membantu negosiasi</h3>
+        <div class="grid">
+          <div class="info-card"><strong>Pengajuan</strong><p>“Saya ingin mengajukan …”<br>“Apakah memungkinkan jika …?”</p></div>
+          <div class="info-card"><strong>Penawaran</strong><p>“Bagaimana jika …?”<br>“Apakah kita bisa mempertimbangkan …?”</p></div>
+          <div class="info-card"><strong>Persetujuan</strong><p>“Baik, saya setuju.”<br>“Kita sepakat dengan pilihan itu.”</p></div>
+          <div class="info-card"><strong>Ketidaksetujuan yang santun</strong><p>“Saya memahami usul itu, tetapi …”<br>“Bagaimana jika kita mencari alternatif lain?”</p></div>
+        </div>
+        <div class="callout"><strong>Ingat:</strong> negosiasi bukan memaksakan kehendak. Dengarkan pihak lain, jelaskan kebutuhanmu, dan pertimbangkan alternatif.</div>
+        <div class="actions"><button class="btn primary" onclick="markMaterial()">✓ Saya Selesai Belajar</button><button class="btn blue" onclick="startSimulation()">Lanjut ke Simulasi →</button></div>
+        <div class="feedback" id="materialFeedback"></div>
+      </div>
+      <div class="panel">
+        <h3>🧠 Cek pemahaman cepat</h3>
+        <p>Dalam dialog tadi, kalimat “Bagaimana jika Rp130.000?” termasuk …</p>
+        <div class="choice-list" id="quickCheck">
+          <button class="choice" onclick="quickAnswer(this,false)"><span class="letter">A</span><span>Orientasi</span></button>
+          <button class="choice" onclick="quickAnswer(this,true)"><span class="letter">B</span><span>Penawaran</span></button>
+          <button class="choice" onclick="quickAnswer(this,false)"><span class="letter">C</span><span>Penutup</span></button>
+        </div>
+        <div class="feedback" id="quickFeedback"></div>
+      </div>
+    </section>
+
+    <section id="simulasi" class="screen">
+      <div class="section-head"><div><span class="tag">02 • PRAKTIK</span><h2>Ayo Bernegosiasi!</h2><p class="lead">Skenario: kamu ingin membeli tas untuk sekolah. Harga awal Rp150.000, sedangkan anggaranmu Rp130.000. Pilih respons yang membuka peluang kesepakatan.</p></div><button class="btn ghost" onclick="go('menu')">← Menu Utama</button></div>
+      <div class="panel">
+        <div class="row" style="justify-content:space-between"><span class="tag" id="simStepTag">TAHAP 1 DARI 3 • PENGAJUAN</span><span class="small">Skor simulasi: <strong id="simScoreDisplay">0</strong>/30</span></div>
+        <div class="progress"><span id="simProgress" style="width:33%"></span></div>
+        <div id="simContent"></div>
+        <div id="simFeedback" class="feedback"></div>
+        <div class="actions" id="simActions"></div>
+      </div>
+      <div class="panel" id="criticalPanel" style="display:none">
+        <span class="tag">BERPIKIR KRITIS</span><h3>Apakah kesepakatan ini adil?</h3>
+        <p>Harga akhirnya Rp130.000. Apakah kesepakatan itu berarti kedua pihak sudah mempertimbangkan kepentingannya? Pilih jawaban dan pikirkan alasanmu.</p>
+        <div class="choice-list" id="criticalChoices">
+          <button class="choice" onclick="criticalAnswer(this,true)"><span class="letter">A</span><span>Ya, karena kedua pihak menerima harga itu; kesepakatan juga perlu mempertimbangkan kebutuhan dan kemampuan masing-masing.</span></button>
+          <button class="choice" onclick="criticalAnswer(this,false)"><span class="letter">B</span><span>Tidak, karena pembeli harus selalu mendapatkan harga paling murah.</span></button>
+          <button class="choice" onclick="criticalAnswer(this,false)"><span class="letter">C</span><span>Tidak, karena penjual selalu harus mengalah.</span></button>
+        </div>
+        <div class="feedback" id="criticalFeedback"></div>
+        <label for="criticalReason">Tulis alasanmu (opsional)</label>
+        <textarea id="criticalReason" placeholder="Contoh: pembeli harus menyesuaikan anggaran, sedangkan penjual perlu mempertimbangkan biaya dan keuntungan ..."></textarea>
+        <div class="actions"><button class="btn primary" onclick="saveReflection()">Simpan Refleksi</button><button class="btn blue" onclick="startQuiz()">Lanjut ke Kuis →</button></div>
+        <div class="feedback" id="reflectionFeedback"></div>
+      </div>
+    </section>
+
+    <section id="kuis" class="screen">
+      <div class="section-head"><div><span class="tag">03 • UJI PEMAHAMAN</span><h2>Kuis Interaktif</h2><p class="lead">Kerjakan tiga soal. Jawaban benar mendapat 10 poin untuk tiap soal; soal mencocokkan struktur memberi 2 poin untuk setiap pasangan benar.</p></div><button class="btn ghost" onclick="go('menu')">← Menu Utama</button></div>
+      <div class="panel">
+        <div class="row" style="justify-content:space-between"><span class="tag" id="quizTag">SOAL 1 DARI 3</span><span class="small">Skor kuis: <strong id="quizScoreDisplay">0</strong>/30</span></div>
+        <div class="progress"><span id="quizProgress" style="width:33%"></span></div>
+        <div id="quizContent"></div>
+        <div id="quizFeedback" class="feedback"></div>
+        <div class="actions" id="quizActions"></div>
+      </div>
+      <div class="panel" id="quizResult" style="display:none">
+        <span class="tag">HASIL KUIS</span><h2>Hebat, kamu sudah menyelesaikan kuis!</h2>
+        <div class="result-number"><span id="finalQuizScore">0</span><span style="font-size:1.5rem">/30</span></div>
+        <p class="result-label" id="quizRemark">Terus berlatih.</p>
+        <div class="callout">Tantangan lanjutan: buat dialog negosiasi sendiri yang memuat orientasi, pengajuan, penawaran, persetujuan, dan penutup.</div>
+        <div class="actions"><button class="btn orange" onclick="startQuiz()">↻ Ulangi Kuis</button><button class="btn primary" onclick="showSummary()">Lihat Hasil Belajar</button><button class="btn ghost" onclick="go('menu')">Menu Utama</button></div>
+      </div>
+    </section>
+
+    <section id="hasil" class="screen">
+      <div class="section-head"><div><span class="tag">REKAP BELAJAR</span><h2>Hasil Belajarmu</h2><p class="lead">Ringkasan ini tersimpan selama halaman dibuka. Tidak membutuhkan internet atau akun.</p></div><button class="btn ghost" onclick="go('menu')">← Menu Utama</button></div>
+      <div class="panel">
+        <div class="result-number"><span id="summaryScore">0</span></div><div class="result-label">Poin terkumpul dari aktivitas ber-skoring</div>
+        <hr><div class="grid">
+          <div class="info-card"><strong>Materi</strong><p id="materialStatus">Belum ditandai selesai</p></div>
+          <div class="info-card"><strong>Simulasi</strong><p id="simulationStatus">Belum diselesaikan</p></div>
+          <div class="info-card"><strong>Kuis</strong><p id="quizStatus">Belum diselesaikan</p></div>
+          <div class="info-card"><strong>Refleksi</strong><p id="reflectionStatus">Belum diisi</p></div>
+        </div>
+        <div class="actions"><button class="btn primary" onclick="go('materi')">Pelajari Lagi</button><button class="btn blue" onclick="startQuiz()">Ulangi Kuis</button><button class="btn ghost" onclick="window.print()">Cetak Hasil</button></div>
+      </div>
+    </section>
+
+    <section id="profile" class="screen">
+      <div class="section-head"><div><span class="tag">INFORMASI</span><h2>Profil & Petunjuk MPI</h2></div><button class="btn ghost" onclick="go('menu')">← Menu Utama</button></div>
+      <div class="panel">
+        <h3>Yuk, Bernegosiasi!</h3>
+        <p><strong>Mata pelajaran:</strong> Bahasa Indonesia • Kelas X / Fase E</p>
+        <p><strong>Materi:</strong> Teks Negosiasi — fokus dialog</p>
+        <p><strong>Satuan pendidikan:</strong> SMK Negeri 5 Kolaka Utara</p>
+        <p><strong>Tahun:</strong> 2026</p>
+        <hr><h3>Petunjuk penggunaan</h3>
+        <ol style="line-height:1.9">
+          <li>Klik <strong>Mulai Belajar</strong>, lalu pilih menu.</li>
+          <li>Di menu Materi, bacalah contoh dialog dan klik tombol fungsi bagian untuk melihat penjelasan.</li>
+          <li>Di Simulasi, pilih respons yang paling santun dan masuk akal. Baca setiap umpan balik.</li>
+          <li>Jawab kuis. Skor dihitung otomatis di browser dan dapat digunakan tanpa internet.</li>
+          <li>Di Hasil Belajar, lihat status aktivitas atau cetak ringkasan.</li>
+        </ol>
+        <div class="callout"><strong>Catatan:</strong> skor dan status tersimpan sementara selama tab ini terbuka. Jika halaman dimuat ulang, sesi akan dimulai kembali.</div>
+        <button class="btn primary" onclick="go('home')">Kembali ke Beranda</button>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">MPI Bahasa Indonesia • Teks Negosiasi • SMK Negeri 5 Kolaka Utara</footer>
+</div>
+<script>
+const state={score:0,materialDone:false,simulationDone:false,quizDone:false,reflectionDone:false,simScore:0,simStage:0,quizScore:0,quizIndex:0,quizAnswers:[],criticalCorrect:false};
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id); if(el)el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'}); updateScore();
+  if(id==='hasil')refreshSummary();
+}
+function updateScore(){document.getElementById('scoreDisplay').textContent=state.score}
+function showStruct(id){const el=document.getElementById(id);el.classList.toggle('show');if(el.classList.contains('show')){el.classList.add('good')}}
+function markMaterial(){state.materialDone=true;const f=document.getElementById('materialFeedback');f.textContent='Bagus! Materi ditandai selesai. Lanjutkan ke simulasi untuk berlatih.';f.className='feedback show good';}
+function quickAnswer(btn,correct){
+  document.querySelectorAll('#quickCheck .choice').forEach(b=>b.classList.remove('correct','wrong','selected'));
+  btn.classList.add(correct?'correct':'wrong');
+  const f=document.getElementById('quickFeedback');f.textContent=correct?'Benar! Itu penawaran karena penjual mengajukan alternatif harga.':'Belum tepat. Penawaran adalah usulan alternatif yang dapat dipertimbangkan pihak lain.';f.className='feedback show '+(correct?'good':'try');
+}
+function startSimulation(){state.simStage=0;state.simScore=0;state.criticalCorrect=false;document.getElementById('criticalPanel').style.display='none';renderSimulation();go('simulasi')}
+const simSteps=[
+ {tag:'TAHAP 1 DARI 3 • PENGAJUAN',prompt:'Penjual: “Tas ini harganya Rp150.000.”',question:'Pilih respons yang paling santun dan membuka peluang negosiasi.',options:['Turunkan harganya!','Apakah harga tas ini masih bisa dinegosiasikan?','Saya tidak mau harga segitu.','Pokoknya Rp120.000.'],correct:1,feedback:'Tepat! Kamu menyampaikan keinginan dengan sopan dan membuka ruang diskusi.'},
+ {tag:'TAHAP 2 DARI 3 • PENAWARAN',prompt:'Penjual: “Saya bisa memberikan harga Rp140.000.”',question:'Kamu memiliki anggaran Rp130.000. Respons mana yang menawarkan jalan menuju titik temu?',options:['Tidak! Harus Rp130.000!','Kalau Rp130.000, saya bersedia membeli.','Terserah.','Harga itu terlalu mahal.'],correct:1,feedback:'Bagus! Kamu mengutarakan batas anggaran sekaligus menjelaskan kondisi yang membuatmu bersedia membeli.'},
+ {tag:'TAHAP 3 DARI 3 • PERSETUJUAN',prompt:'Penjual: “Baik, saya setuju Rp130.000.”',question:'Apa respons yang tepat setelah kedua pihak menyetujui harga?',options:['Menolak lagi tanpa alasan.','Menerima kesepakatan dan mengucapkan terima kasih.','Meminta harga semakin murah setelah disepakati.','Meninggalkan penjual tanpa menanggapi.'],correct:1,feedback:'Benar! Setelah sepakat, tegaskan persetujuan dan tutup percakapan dengan santun.'}
+];
+function renderSimulation(){
+ const step=simSteps[state.simStage];document.getElementById('simStepTag').textContent=step.tag;document.getElementById('simProgress').style.width=((state.simStage+1)/3*100)+'%';document.getElementById('simScoreDisplay').textContent=state.simScore;
+ document.getElementById('simContent').innerHTML='<h3>'+step.prompt+'</h3><p>'+step.question+'</p><div class="choice-list">'+step.options.map((o,i)=>'<button class="choice" onclick="chooseSimulation('+i+')"><span class="letter">'+String.fromCharCode(65+i)+'</span><span>'+o+'</span></button>').join('')+'</div>';
+ document.getElementById('simFeedback').className='feedback';document.getElementById('simFeedback').textContent='';
+ document.getElementById('simActions').innerHTML='';
+}
+function chooseSimulation(i){
+ const step=simSteps[state.simStage],buttons=[...document.querySelectorAll('#simContent .choice')],ok=i===step.correct;
+ buttons.forEach((b,k)=>{b.disabled=true;if(k===step.correct)b.classList.add('correct');else if(k===i)b.classList.add('wrong')});
+ const f=document.getElementById('simFeedback');f.textContent=ok?step.feedback:'Coba pikirkan kembali. Respons negosiasi yang baik menyampaikan kebutuhan dengan jelas tanpa memaksakan kehendak.';f.className='feedback show '+(ok?'good':'try');
+ if(ok){state.simScore+=10;state.score+=10}
+ document.getElementById('simScoreDisplay').textContent=state.simScore;updateScore();
+ const actions=document.getElementById('simActions');
+ if(!ok){actions.innerHTML='<button class="btn orange" onclick="renderSimulation()">↻ Coba Lagi</button>';return}
+ if(state.simStage<2){actions.innerHTML='<button class="btn primary" onclick="nextSimulation()">Tahap Berikutnya →</button>'}
+ else{state.simulationDone=true;actions.innerHTML='<button class="btn primary" onclick="finishSimulation()">Lihat Kesepakatan →</button>'}
+}
+function nextSimulation(){state.simStage++;renderSimulation()}
+function finishSimulation(){
+ document.getElementById('simStepTag').textContent='MISI SELESAI';document.getElementById('simProgress').style.width='100%';
+ document.getElementById('simContent').innerHTML='<div class="success" style="text-align:center;padding:28px"><div style="font-size:3rem">🤝</div><h2>Kesepakatan Tercapai!</h2><p>Harga akhir Rp130.000 sesuai anggaranmu. Kamu berhasil menyampaikan kebutuhan dan mempertimbangkan respons penjual.</p></div>';
+ document.getElementById('simFeedback').className='feedback';document.getElementById('simActions').innerHTML='<button class="btn orange" onclick="startSimulation()">↻ Ulangi Simulasi</button>';
+ document.getElementById('criticalPanel').style.display='block';updateScore();go('simulasi');
+}
+function criticalAnswer(btn,correct){
+ document.querySelectorAll('#criticalChoices .choice').forEach(b=>b.classList.remove('correct','wrong'));
+ btn.classList.add(correct?'correct':'wrong');state.criticalCorrect=correct;
+ const f=document.getElementById('criticalFeedback');f.textContent=correct?'Tepat. Kesepakatan membutuhkan persetujuan, tetapi alasan dan kebutuhan kedua pihak juga penting untuk menilai kualitasnya.':'Coba pikirkan kepentingan kedua pihak. Negosiasi bukan berarti salah satu pihak harus selalu menang atau mengalah.';f.className='feedback show '+(correct?'good':'try');
+}
+function saveReflection(){state.reflectionDone=true;const f=document.getElementById('reflectionFeedback');f.textContent='Refleksi tersimpan untuk sesi ini. Kamu dapat melanjutkan ke kuis.';f.className='feedback show good';}
+const quizData=[
+ {title:'Soal 1 • Mengenali penawaran',type:'mcq',q:'Perhatikan dialog: Pembeli: “Apakah harganya bisa dikurangi?” Penjual: “Saya bisa memberikan harga Rp90.000.” Pembeli: “Baik, saya setuju.” Kalimat yang menunjukkan penawaran adalah …',options:['“Apakah harganya bisa dikurangi?”','“Saya bisa memberikan harga Rp90.000.”','“Baik, saya setuju.”','Seluruh dialog.'],correct:1,explain:'Kalimat penjual menawarkan alternatif harga Rp90.000, sehingga merupakan penawaran.'},
+ {title:'Soal 2 • Cocokkan struktur dialog',type:'drag',q:'Cocokkan setiap dialog dengan struktur teks negosiasi yang paling sesuai. Pada layar sentuh, ketuk dialog lalu ketuk kategori tujuannya.',items:[['Selamat pagi, Pak.','Orientasi'],['Saya ingin membeli alat ini.','Pengajuan'],['Bagaimana jika harganya Rp100.000?','Penawaran'],['Baik, kita sepakat.','Persetujuan'],['Terima kasih.','Penutup']],categories:['Orientasi','Pengajuan','Penawaran','Persetujuan','Penutup'],explain:'Struktur membantu pembaca melihat pembukaan, penyampaian keinginan, proses penawaran, persetujuan, dan penutupan.'},
+ {title:'Soal 3 • Berpikir kritis',type:'mcq',q:'Seorang pelanggan merasa harga jasa terlalu mahal. Kalimat mana yang paling tepat untuk membuka negosiasi dengan santun?',options:['“Kalau mahal, saya cari tempat lain.”','“Turunkan harga sekarang!”','“Saya memahami kualitas jasa. Apakah kita dapat mempertimbangkan harga yang sesuai dengan anggaran saya?”','“Harga itu tidak masuk akal.”'],correct:2,explain:'Pilihan C mengakui kualitas jasa, menjelaskan kebutuhan, dan mengajak mencari alternatif tanpa merendahkan pihak lain.'}
+];
+function startQuiz(){state.quizIndex=0;state.quizScore=0;state.quizAnswers=[];document.getElementById('quizResult').style.display='none';document.getElementById('quizContent').style.display='block';document.getElementById('quizFeedback').className='feedback';renderQuiz();go('kuis')}
+function renderQuiz(){
+ const q=quizData[state.quizIndex];document.getElementById('quizTag').textContent='SOAL '+(state.quizIndex+1)+' DARI 3';document.getElementById('quizProgress').style.width=((state.quizIndex+1)/3*100)+'%';document.getElementById('quizScoreDisplay').textContent=state.quizScore;document.getElementById('quizFeedback').className='feedback';
+ const c=document.getElementById('quizContent');
+ if(q.type==='mcq'){
+  c.innerHTML='<h3>'+q.title+'</h3><p>'+q.q+'</p><div class="choice-list">'+q.options.map((o,i)=>'<button class="choice" onclick="answerQuiz('+i+')"><span class="letter">'+String.fromCharCode(65+i)+'</span><span>'+o+'</span></button>').join('')+'</div>';
+  document.getElementById('quizActions').innerHTML='';
+ }else{
+  renderDragQuiz();
+ }
+}
+function answerQuiz(i){
+ const q=quizData[state.quizIndex];const buttons=[...document.querySelectorAll('#quizContent .choice')],ok=i===q.correct;buttons.forEach((b,k)=>{b.disabled=true;if(k===q.correct)b.classList.add('correct');if(k===i&&!ok)b.classList.add('wrong')});
+ if(ok){state.quizScore+=10;state.score+=10}
+ const f=document.getElementById('quizFeedback');f.textContent=(ok?'Benar! ':'Belum tepat. ')+q.explain;f.className='feedback show '+(ok?'good':'try');document.getElementById('quizScoreDisplay').textContent=state.quizScore;updateScore();
+ document.getElementById('quizActions').innerHTML='<button class="btn primary" onclick="nextQuiz()">Lanjut →</button>';
+}
+let selectedDrag=null,dragMatches={},dragChecked=false;
+function renderDragQuiz(){
+ selectedDrag=null;dragMatches={};dragChecked=false;const q=quizData[1],items=q.items.map((it,i)=>({text:it[0],answer:it[1],id:i}));items.sort(()=>Math.random()-.5);
+ const dialogButtons=items.map(it=>`<button class="draggable" data-id="${it.id}" draggable="true" onclick="selectDrag(${it.id},this)" ondragstart="dragStart(event,${it.id})">${it.text}</button>`).join('');
+ const zones=q.categories.map(cat=>`<div class="dropzone" data-cat="${cat}" onclick="dropSelected('${cat}',this)" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropDrag(event,'${cat}',this)"><strong>${cat}</strong><span class="placeholder">Ketuk/seret dialog ke sini</span></div>`).join('');
+ document.getElementById('quizContent').innerHTML=`<h3>${q.title}</h3><p>${q.q}</p><div class="drag-layout"><div><h3>Dialog</h3><div id="dragItems">${dialogButtons}</div></div><div><h3>Struktur</h3><div id="dropZones">${zones}</div></div></div><p class="small">Desktop: seret dialog. Ponsel: ketuk dialog, lalu ketuk kategori.</p>`;
+ document.getElementById('quizActions').innerHTML='<button class="btn blue" onclick="checkDrag()">Periksa Pasangan</button>';
+}
+function selectDrag(id,el){if(dragChecked)return;selectedDrag=id;document.querySelectorAll('.draggable').forEach(e=>e.style.outline='none');el.style.outline='3px solid #2b6291'}
+function dragStart(e,id){selectedDrag=id;e.dataTransfer.setData('text/plain',String(id))}
+function dropSelected(cat,el){if(selectedDrag===null||dragChecked)return;placeDrag(selectedDrag,cat);selectedDrag=null;document.querySelectorAll('.draggable').forEach(e=>e.style.outline='none');}
+function dropDrag(e,cat,el){e.preventDefault();el.classList.remove('over');const id=Number(e.dataTransfer.getData('text/plain'));placeDrag(id,cat);selectedDrag=null;document.querySelectorAll('.draggable').forEach(e=>e.style.outline='none')}
+function placeDrag(id,cat){
+ // Satu kategori hanya menerima satu dialog; dialog yang dipindahkan akan dilepas dari kategori sebelumnya.
+ Object.keys(dragMatches).forEach(key=>{if(dragMatches[key]===cat && Number(key)!==id)delete dragMatches[key]});
+ dragMatches[id]=cat;
+ const q=quizData[1];document.querySelectorAll('.dropzone').forEach(zone=>{
+   const zcat=zone.dataset.cat;const assigned=Object.entries(dragMatches).find(([key,value])=>value===zcat);
+   let p=zone.querySelector('.placeholder');if(assigned){const item=q.items[Number(assigned[0])][0];p.textContent='Dialog: '+item;p.style.color='#17324f';}else{p.textContent='Ketuk/seret dialog ke sini';p.style.color='#617487'}
+ });
+}
+function checkDrag(){
+ if(dragChecked)return;dragChecked=true;const q=quizData[1];let pts=0;
+ q.items.forEach((it,i)=>{if(dragMatches[i]===it[1])pts+=2});
+ state.quizScore+=pts;state.score+=pts;state.quizAnswers[1]=pts;
+ document.getElementById('quizScoreDisplay').textContent=state.quizScore;updateScore();
+ document.querySelectorAll('.dropzone').forEach(zone=>{
+   const assigned=Object.entries(dragMatches).find(([key,value])=>value===zone.dataset.cat);
+   if(assigned && q.items[Number(assigned[0])][1]===zone.dataset.cat)zone.classList.add('correct-drop');
+ });
+ const f=document.getElementById('quizFeedback');f.textContent='Skor mencocokkan: '+pts+'/10. '+q.explain;f.className='feedback show '+(pts===10?'good':'try');
+ document.querySelectorAll('.draggable').forEach(b=>b.disabled=true);
+ document.getElementById('quizActions').innerHTML='<button class="btn primary" onclick="nextQuiz()">Lanjut →</button>';
+}
+function nextQuiz(){
+ if(state.quizIndex<2){state.quizIndex++;renderQuiz();return}
+ state.quizDone=true;document.getElementById('quizContent').style.display='none';document.getElementById('quizActions').innerHTML='';document.getElementById('quizResult').style.display='block';document.getElementById('finalQuizScore').textContent=state.quizScore;
+ let remark=state.quizScore>=25?'Sangat baik! Kamu sudah memahami sebagian besar konsep dan struktur dialog negosiasi.':state.quizScore>=18?'Baik! Tinjau kembali bagian yang masih belum tepat lalu coba lagi.':'Terus berlatih. Pelajari kembali contoh dialog dan fungsi setiap strukturnya.';
+ document.getElementById('quizRemark').textContent=remark;updateScore();
+}
+function showSummary(){go('hasil')}
+function refreshSummary(){
+ document.getElementById('summaryScore').textContent=state.score;
+ document.getElementById('materialStatus').textContent=state.materialDone?'Selesai dipelajari':'Belum ditandai selesai';
+ document.getElementById('simulationStatus').textContent=state.simulationDone?'Selesai • skor '+state.simScore+'/30':'Belum diselesaikan';
+ document.getElementById('quizStatus').textContent=state.quizDone?'Selesai • skor '+state.quizScore+'/30':'Belum diselesaikan';
+ document.getElementById('reflectionStatus').textContent=state.reflectionDone?'Refleksi disimpan di sesi ini':'Belum diisi';
+}
+</script>
+</body>
+</html>
